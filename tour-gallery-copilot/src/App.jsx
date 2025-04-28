@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// Import necessary dependencies from React
+import React, { useState, useEffect } from 'react';
+// Import styles
+import './styles/styles.css';
 
+// Main App component
 function App() {
-  const [count, setCount] = useState(0)
+  // State to store the list of tours fetched from the API
+  const [tours, setTours] = useState([]);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  // State to manage the loading state while fetching data
+  const [loading, setLoading] = useState(true);
+
+  // State to store any error messages during the data fetching process
+  const [error, setError] = useState(null);
+
+  // Function to fetch tours from the API
+  const fetchTours = async () => {
+    
+    // Set loading to true to indicate data fetching is in progress
+    setLoading(true);
+
+    try {
+      const response = await fetch('https://api.allorigins.win/raw?url=https://course-api.com/react-tours-project');
+
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch tours');
+      }
+
+      
+      const data = await response.json();
+
+      
+      setTours(data);
+
+      
+      setError(null);
+    
+    } catch (err) {
+      
+      setError(err.message);
+    
+    } finally {
+      
+      setLoading(false);
+    }
+  };
+
+  
+  useEffect(() => {
+    fetchTours();
+  }, []);
+
+  
+  const removeTour = (id) => {
+   
+    setTours(tours.filter((tour) => tour.id !== id));
+  };
 }
 
-export default App
+export default App;
