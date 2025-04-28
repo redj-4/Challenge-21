@@ -52,5 +52,26 @@ function App() {
   if (error) {
     return <h2>Error: {error}</h2>;
   }
+
+  // Task 5 - Add refresh button to reload tours when the list is empty
+  if (tours.length === 0) {
+    return (
+      <div className="no-tours">
+        <h2>No Tours Left</h2> 
+        
+        {/* Button to refresh the tour list */}
+        <button className="refresh-button" onClick={fetchTours}>
+          Refresh
+        </button>
+      </div>
+    );
+  }
+// Main component rendering the title and gallery
+  return (
+    <div>
+      <h1>Tours</h1>
+      <Gallery tours={tours} onRemove={removeTour} />
+    </div>
+  );
 }
 export default App; //export the App component
